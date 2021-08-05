@@ -1,0 +1,72 @@
+<!----------------------------------------------------
+* @file index.html
+* @language html
+* @date July 2021
+*
+* @author Hunzlah Malik @ghostdart
+------------------------------------------------------->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Scripts -->
+  <script defer src="fontawesome/js/all.js"></script>
+  <script src="scripts/calculator.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+  <title>Mediocre Grades</title>
+</head>
+
+<body>
+
+
+  <div class="gpa container-fluid" id="gpa">
+    <h1>SGPA Calculator</h1>
+
+    <div class="gpa-cal" id="gpa-cal">
+      <h3>Courses
+        <button type="button" class="btn btn-success" onClick="addCourseIn();">
+          <i class="fas fa-plus"></i>
+        </button> </h2>
+    </div>
+
+    <div id="calulated-gpa">
+      <!-- SGPA = <p id="calulated-gpa"></p> -->
+    </div>
+  </div>
+
+  <div class="cgpa container-fluid" id="cgpa">
+    <h1>CGPA Calculator</h1>
+
+    <div class="cgpa-cal" id="cgpa-cal">
+      <h3>Semesters
+        <button type="button" class="btn btn-success" onClick="addSemesterIn();">
+          <i class="fas fa-plus"></i>
+        </button> </h2>
+    </div>
+
+    <div id="calulated-cgpa"></div>
+  </div>
+
+  <div class="grade-points container-fluid" id="grade-points">
+    Letter Grade Points
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      viewGradePoints();
+      viewGpaCalculator();
+    }, false);
+  </script>
+
+</body>
+
+</html>
