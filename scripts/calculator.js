@@ -118,7 +118,7 @@ function viewGpaCalculator() {
 
 function calculateGpa(formid) {
   let gpa = 0;
-  let coursecount = 0;
+  let totalchr = 0;
   let allcourses = document.getElementById(formid);
   for (let i = 1; i < allcourses.length; i += 4) {
     let chr = +allcourses[i].value;
@@ -126,10 +126,10 @@ function calculateGpa(formid) {
 
     if (!isNaN(chr) && chr != 0) {
       gpa += (chr * grade);
-      coursecount++;
+      totalchr += chr;
     }
   }
-  gpa /= coursecount;
+  gpa /= totalchr;
   return gpa;
 }
 
