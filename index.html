@@ -20,17 +20,17 @@
   <script src="scripts/calculator.js"></script>
 
 
-  <link rel="stylesheet" href="styles/index.css">
   <!-- Bootstrap CSS -->
-  <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+  <link id="indexstyle" rel="stylesheet" href="styles/dark.index.css">
+
 
   <title>Mediocre Grades</title>
 </head>
 
 <body>
 
-
-
+  <button type="button" onclick="toggle()">Theme Switch</button>
 
   <h1>SGPA Calculator</h1>
 
@@ -159,6 +159,14 @@
       viewCGpaCalculator();
       viewGradePoints();
     }, false);
+
+    document.getElementById("indexstyle").x = 'styles/dark.index'
+
+    function toggle() {
+      let a = document.getElementById("indexstyle");
+      a.x = 'styles/dark.index' === a.x ? 'styles/light.index' : 'styles/dark.index'; // short if
+      a.href = a.x + '.css';
+    }
   </script>
 
 </body>
