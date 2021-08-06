@@ -16,16 +16,12 @@ const gradePoints = {
   "F": 0.00,
 };
 
-let initialCourses = 5;
-let courseCounter = 1;
+var courseCounter = 1;
 
-function getGrades() {
-  lst = [];
-  for (const [key, _] of Object.entries(gradePoints)) {
-    lst.push(key);
-  }
-  return lst;
-}
+const sgpaCalculator = {
+  counter: 1,
+};
+
 
 function viewGradePoints() {
 
@@ -61,26 +57,32 @@ function updateGradePoint(key) {
   }
 }
 
+//sgpa
+
 function addCourseStr(cid) {
   let coursehtml = `
-  <p id="course-row-${cid}">
-    <input type="text" placeholder="Course Code (Optional)" class="course-${cid}" required>
-    <input type="number" placeholder="Credit Hourse" class="credit-hour-${cid}" onchange="viewCalGpa();" required>
-    <select class="grade-${cid} form" required>
+    <tr id="course-row-${cid}">
+      <td><input type="text" placeholder="Course Name (Optional)" class="form-control course" required /></td>
+      <td><input type="number" placeholder="Credit Hours" class="form-control credit-hour" onchange="viewCalGpa();" required /></td>
+      <td>
+        <select class="form-control grade" onchange="viewCalGpa();" required>
   `;
 
   for (const [key, _] of Object.entries(gradePoints)) {
     coursehtml += `
-    <option value="${key}" onchange="viewCalGpa();">${key}</option>
+          <option value="${key}" onchange="viewCalGpa();">${key}</option>
     `;
   }
 
   coursehtml += `
-    </select>
-    <button type="button" class="btn btn-danger" onClick="rmCourseIn('course-row-${cid}');viewCalGpa();">
-      <i class="fas fa-trash"></i>
-    </button>
-  </p>
+        </select>
+      </td>
+      <td>
+        <button type="button" class="btn btn-danger" onClick="rmCourseIn('course-row-${cid}');viewCalGpa();">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
   `;
   return coursehtml;
 }
@@ -91,7 +93,7 @@ function addCourseIn(formid) {
 }
 
 function addCourseIn() {
-  document.getElementById("gpa-cal-form").
+  document.getElementById("sgpa-body").
     insertAdjacentHTML('beforeend', addCourseStr(courseCounter++));
 }
 
@@ -103,26 +105,20 @@ function rmCourseIn(courseid) {
 }
 
 function viewGpaCalculator() {
-  let gpaCalView = document.getElementById("gpa-cal");
-
-  let form = document.createElement("form");
-  form.setAttribute("class", "gpa-cal-form");
-  form.setAttribute("id", "gpa-cal-form");
-
-  gpaCalView.appendChild(form);
-
-  for (let i = 0; i < initialCourses; i++) {
-    addCourseIn("gpa-cal-form");
+  for (let i = 0; i < 5; i++) {
+    addCourseIn();
   }
 }
 
-function calculateGpa(formid) {
+function calculateGpa(id) {
   let gpa = 0;
   let totalchr = 0;
-  let allcourses = document.getElementById(formid);
-  for (let i = 1; i < allcourses.length; i += 4) {
-    let chr = +allcourses[i].value;
-    let grade = gradePoints[allcourses[i + 1].value];
+
+  let table = document.getElementById(id).rows;
+
+  for (let i = 0; i < table.length; i++) {
+    let chr = +table[i].cells[1].children[0].value;
+    let grade = gradePoints[table[i].cells[2].children[0].value];
 
     if (!isNaN(chr) && chr != 0) {
       gpa += (chr * grade);
@@ -134,6 +130,92 @@ function calculateGpa(formid) {
 }
 
 function viewCalGpa() {
-  let gpa = calculateGpa("gpa-cal-form");
-  document.getElementById("calulated-gpa").innerHTML = `Your GPA is ${gpa}`;
+  let gpa = calculateGpa("sgpa-body");
+  document.getElementById("calulated-sgpa").innerHTML = `Your GPA is ${gpa}`;
+}
+
+////////////////////////////////////////////////////////
+
+function addSemesStr(cid) {
+  return `
+    <tr id="semester-row-${cid}">
+      <td><input type="text" placeholder="Semester (Optional)" class="form-control semester" required /></td>
+      <td><input type="number" placeholder="Credit Hours" class="form-control semes-credit-hour" onchange="viewCalCGpa();" required /></td>
+      <td><input type="number" placeholder="SGPA" class="form-control sgpa" onchange="viewCalCGpa();" required /></td>
+      <td>
+        <button type="button" class="btn btn-danger" onClick="rmSemesIn('semester-row-${cid}');viewCalCGpa();">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>  
+    `;
+}
+
+function addSemesIn(formid) {
+  document.getElementById(formid).
+    insertAdjacentHTML('beforeend', addSemesStr(courseCounter++));
+}
+
+function addSemesIn() {
+  document.getElementById("cgpa-body").
+    insertAdjacentHTML('beforeend', addSemesStr(courseCounter++));
+}
+
+function rmSemesIn(sid) {
+  console.log("Removing: " + sid);
+  let ele = document.getElementById(sid);
+  console.log(ele);
+  ele.remove();
+}
+
+function viewCGpaCalculator() {
+  for (let i = 0; i < 3; i++) {
+    addSemesIn();
+  }
+}
+
+function calculateCGpa(id) {
+  let cgpa = 0;
+  let totalchr = 0;
+
+  let table = document.getElementById(id).rows;
+
+  for (let i = 0; i < table.length; i++) {
+    let chr = +table[i].cells[1].children[0].value;
+    let sgpa = +table[i].cells[2].children[0].value;
+
+    if (!isNaN(chr) && !isNaN(sgpa)) {
+      cgpa += (chr * sgpa);
+      totalchr += chr;
+    }
+  }
+  cgpa /= totalchr;
+  return cgpa;
+}
+
+function viewCalCGpa() {
+  let gpa = calculateCGpa("cgpa-body");
+  document.getElementById("calulated-cgpa").innerHTML = `Your CGPA is ${gpa}`;
+}
+
+//////////////////////////////////////////////////
+
+function calculateTGpa(id) {
+  let gpa = 0;
+
+  let table = document.getElementById(id).rows;
+
+  let currentchr = +table[0].cells[0].children[0].value;
+  let currentgpa = +table[0].cells[1].children[0].value;
+  let remainingchr = +table[1].cells[0].children[0].value;
+  let targetgpa = +table[1].cells[1].children[0].value;
+
+  gpa = (targetgpa * (currentchr + remainingchr) - (currentchr * currentgpa)) / remainingchr;
+
+  return gpa;
+}
+
+function viewCalTGpa() {
+  let tgpa = calculateTGpa("tgpa-body");
+  document.getElementById("calulated-tgpa").innerHTML = `You need ${tgpa} or higher gpa in remaining credits to reach your target.`;
 }
